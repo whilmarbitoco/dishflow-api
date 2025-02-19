@@ -8,6 +8,7 @@ import jakarta.ws.rs.BadRequestException;
 import org.whilmarbitoco.Core.DTO.EmployeeDTO;
 import org.whilmarbitoco.Core.DTO.LoginDTO;
 import org.whilmarbitoco.Core.DTO.TokenDTO;
+import org.whilmarbitoco.Core.DTO.VerifyEmailDTO;
 import org.whilmarbitoco.Core.Model.Employee;
 import org.whilmarbitoco.Core.Model.Role;
 import org.whilmarbitoco.Core.Model.User;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 @ApplicationScoped
-public class EmployeeService {
+public class AuthService {
 
     @Inject
     EmployeeRepository employeeRepository;
@@ -33,9 +34,11 @@ public class EmployeeService {
     @Inject
     TokenService tokenService;
 
+    @Inject
+    EmailVerificationService emailVerificationService;
 
     @Transactional
-    public void create(EmployeeDTO empDTO) {
+    public void signup(EmployeeDTO empDTO) {
         if (empDTO.getEmail() == null || !empDTO.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
             throw new BadRequestException("Invalid email format.");
         }
@@ -58,6 +61,7 @@ public class EmployeeService {
         employee.setRole(role);
 
         employeeRepository.persist(employee);
+        emailVerificationService.sendVerification(empDTO.getEmail());
     }
 
     public TokenDTO authenticate(LoginDTO loginDTO) {
@@ -75,6 +79,28 @@ public class EmployeeService {
 
         token.accessToken = tokenService.generateAccessToken(user.getEmail(), role);
         return token;
+    }
+
+    public void verifyEmail(VerifyEmailDTO dto) {
+        User user = userRepository.findByEmail(dto.email);
+        if (user == null) {
+            throw new BadRequestException("Email Not Found.");
+        }
+
+        emailVerificationService.verifyCode(dto.email, dto.code);
+
+//        TODO: change user.is_verified = true
+    }
+
+    public void generateVerification(LoginDTO loginDTO) {
+        User user = userRepository.findByEmail(loginDTO.email);
+        if (user == null) {
+            throw new BadRequestException("Email Not Found.");
+        }
+
+//        TODO: Check if user.is_verified = false
+
+        emailVerificationService.sendVerification(loginDTO.email);
     }
 
     public List<EmployeeDTO> getAll() {
