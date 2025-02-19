@@ -20,7 +20,7 @@ public class GlobalExceptionMapper implements ExceptionMapper<Exception> {
                     .build();
         } else {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(Map.of("error", "An unexpected error occurred."))
+                    .entity(Map.of("error", e.getMessage()))
                     .type(MediaType.APPLICATION_JSON)
                     .build();
         }

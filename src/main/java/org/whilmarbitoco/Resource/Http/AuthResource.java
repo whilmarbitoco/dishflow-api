@@ -1,6 +1,7 @@
 package org.whilmarbitoco.Resource.Http;
 
 import io.quarkus.mailer.Mailer;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -9,8 +10,11 @@ import org.whilmarbitoco.Core.DTO.EmployeeDTO;
 import org.whilmarbitoco.Core.DTO.LoginDTO;
 import org.whilmarbitoco.Core.DTO.TokenDTO;
 import org.whilmarbitoco.Core.DTO.VerifyEmailDTO;
+import org.whilmarbitoco.Core.Model.User;
+import org.whilmarbitoco.Repository.UserRepository;
 import org.whilmarbitoco.Service.AuthService;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -54,5 +58,6 @@ public class AuthResource {
                 .entity(Map.of("result", "Please check your email to verify your account."))
                 .build();
     }
+
 
 }

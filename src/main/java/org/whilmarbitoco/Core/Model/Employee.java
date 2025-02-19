@@ -1,6 +1,5 @@
 package org.whilmarbitoco.Core.Model;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;

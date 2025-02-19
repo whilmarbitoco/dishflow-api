@@ -1,7 +1,7 @@
 package org.whilmarbitoco.Core.Model;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 
 import java.time.LocalDate;
 
@@ -25,6 +25,8 @@ public class User {
     @Column(name = "updated_at")
     private LocalDate updated_at;
 
+    @Column(name = "is_verified")
+    private boolean is_verified;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Employee employee;
@@ -44,6 +46,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean IsVerified() {
+        return is_verified;
+    }
+
+    public void verify() {
+        is_verified = true;
     }
 
     public String getPassword() {

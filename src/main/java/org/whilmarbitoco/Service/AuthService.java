@@ -88,8 +88,7 @@ public class AuthService {
         }
 
         emailVerificationService.verifyCode(dto.email, dto.code);
-
-//        TODO: change user.is_verified = true
+        userRepository.verifyUser(user.getId());
     }
 
     public void generateVerification(LoginDTO loginDTO) {
@@ -98,14 +97,16 @@ public class AuthService {
             throw new BadRequestException("Email Not Found.");
         }
 
-//        TODO: Check if user.is_verified = false
+        if (user.IsVerified()) {
+            throw new BadRequestException("User Already Verified.");
+        }
 
         emailVerificationService.sendVerification(loginDTO.email);
     }
 
     public List<EmployeeDTO> getAll() {
         return employeeRepository.listAll().stream().map(employee -> {
-           return new EmployeeDTO(employee.getUser().getEmail(), employee.getUser().getPassword(), employee.getFirstname(), employee.getLastname(), employee.getRole().getRole());
+           return new EmployeeDTO(employee.getUser().getEmail(), employee.getUser().getPassword(), employee.getFirstname(), employee.getLastname(), employee.getRole().getRole(), employee.getUser().IsVerified());
         }).toList();
     }
 }
