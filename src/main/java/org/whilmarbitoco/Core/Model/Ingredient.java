@@ -3,6 +3,7 @@ package org.whilmarbitoco.Core.Model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "Ingredient")
@@ -26,6 +27,9 @@ public class Ingredient {
 
     @Column(name = "updated_at")
     private LocalDate updated_at;
+
+    @OneToMany(mappedBy = "ingredient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MenuIngredient> menu;
 
 
     public Ingredient() {}

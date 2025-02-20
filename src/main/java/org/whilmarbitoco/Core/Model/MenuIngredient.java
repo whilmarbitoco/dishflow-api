@@ -12,48 +12,50 @@ public class MenuIngredient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "Menu", cascade = CascadeType.ALL, orphanRemoval = false, fetch = FetchType.LAZY)
-    private Menu menus;
+    @ManyToOne
+    @JoinColumn(name = "menu_id", nullable = false)
+    private Menu menu;
 
-    @ManyToMany(mappedBy = "Ingredient", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
-    private List<Ingredient> ingredients;
+    @ManyToOne
+    @JoinColumn(name = "ingredient_id", nullable = false)
+    private Ingredient ingredient;
 
-    @Column(name = "quantity_required")
-    private int quantity_required;
+    @Column(name = "quantity_required", nullable = false)
+    private int quantityRequired;
 
     public MenuIngredient() {}
 
-    public MenuIngredient(Menu menus, List<Ingredient> ingredients, int quantity_required) {
-        this.menus = menus;
-        this.ingredients = ingredients;
-        this.quantity_required = quantity_required;
+    public MenuIngredient(Menu menu, Ingredient ingredient, int quantityRequired) {
+        this.menu = menu;
+        this.ingredient = ingredient;
+        this.quantityRequired = quantityRequired;
     }
 
     public Long getId() {
         return id;
     }
 
-    public Menu getMenus() {
-        return menus;
+    public Menu getMenu() {
+        return menu;
     }
 
-    public List<Ingredient> getIngredients() {
-        return ingredients;
+    public void setMenu(Menu menu) {
+        this.menu = menu;
     }
 
-    public int getQuantity_required() {
-        return quantity_required;
+    public Ingredient getIngredient() {
+        return ingredient;
     }
 
-    public void setMenus(Menu menus) {
-        this.menus = menus;
+    public void setIngredient(Ingredient ingredient) {
+        this.ingredient = ingredient;
     }
 
-    public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
+    public int getQuantityRequired() {
+        return quantityRequired;
     }
 
-    public void setQuantity_required(int quantity_required) {
-        this.quantity_required = quantity_required;
+    public void setQuantityRequired(int quantityRequired) {
+        this.quantityRequired = quantityRequired;
     }
 }

@@ -3,12 +3,10 @@ package org.whilmarbitoco.Core.DTO;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-public class VerifyEmailDTO {
+public class EmailDTO {
 
     @Email
     @NotBlank
     public String email;
 
-    @NotBlank
-    public String code;
 }

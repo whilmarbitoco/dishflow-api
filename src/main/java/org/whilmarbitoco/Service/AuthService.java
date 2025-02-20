@@ -37,40 +37,43 @@ public class AuthService {
     @Inject
     EmailVerificationService emailVerificationService;
 
-    @Transactional
-    public void signup(EmployeeDTO empDTO) {
-        if (empDTO.getEmail() == null || !empDTO.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-            throw new BadRequestException("Invalid email format.");
-        }
+    @Inject
+    MailService mailService;
 
-        if (userRepository.findByEmail(empDTO.getEmail()) != null) {
+    @Transactional
+    public void signup(String email, String password, String firstname, String lastname, String role) {
+        validateEmail(email);
+
+        if (userRepository.findByEmail(email) != null) {
             throw new BadRequestException("Email Already Registered.");
         }
 
-        Role role = roleRepository.findByName(empDTO.getRole());
-        if (role == null) {
-            throw new BadRequestException("Invalid Role: " + empDTO.getRole());
+        Role empRole = roleRepository.findByName(role);
+        if (empRole == null) {
+            throw new BadRequestException("Invalid Role: " + role);
         }
 
-        String hashedPassword = BcryptUtil.bcryptHash(empDTO.getPassword());
-        User user = new User(empDTO.getEmail(), hashedPassword);
+        String hashedPassword = BcryptUtil.bcryptHash(password);
+        User user = new User(email, hashedPassword);
         userRepository.persist(user);
 
-        Employee employee = new Employee(empDTO.getFirstname(), empDTO.getLastname());
+        Employee employee = new Employee(firstname, lastname);
         employee.setUser(user);
-        employee.setRole(role);
+        employee.setRole(empRole);
 
         employeeRepository.persist(employee);
-        emailVerificationService.sendVerification(empDTO.getEmail());
+        emailVerificationService.sendVerification(email);
     }
 
-    public TokenDTO authenticate(LoginDTO loginDTO) {
-        User user = userRepository.findByEmail(loginDTO.email);
+    public TokenDTO authenticate(String email, String password) {
+        validateEmail(email);
+
+        User user = userRepository.findByEmail(email);
         if (user == null) {
             throw new BadRequestException("Email Not Fount.");
         }
 
-        if (!BcryptUtil.matches(loginDTO.password, user.getPassword())) {
+        if (!BcryptUtil.matches(password, user.getPassword())) {
             throw new BadRequestException("Invalid Username or Password.");
         }
 
@@ -81,18 +84,21 @@ public class AuthService {
         return token;
     }
 
-    public void verifyEmail(VerifyEmailDTO dto) {
-        User user = userRepository.findByEmail(dto.email);
+    public void verifyEmail(String email, String code) {
+        validateEmail(email);
+
+        User user = userRepository.findByEmail(email);
         if (user == null) {
             throw new BadRequestException("Email Not Found.");
         }
 
-        emailVerificationService.verifyCode(dto.email, dto.code);
+        emailVerificationService.verifyCode(email, code);
         userRepository.verifyUser(user.getId());
     }
 
-    public void generateVerification(LoginDTO loginDTO) {
-        User user = userRepository.findByEmail(loginDTO.email);
+    public void generateVerification(String email) {
+        validateEmail(email);
+        User user = userRepository.findByEmail(email);
         if (user == null) {
             throw new BadRequestException("Email Not Found.");
         }
@@ -101,7 +107,7 @@ public class AuthService {
             throw new BadRequestException("User Already Verified.");
         }
 
-        emailVerificationService.sendVerification(loginDTO.email);
+        emailVerificationService.sendVerification(email);
     }
 
     public List<EmployeeDTO> getAll() {
@@ -109,4 +115,12 @@ public class AuthService {
            return new EmployeeDTO(employee.getUser().getEmail(), employee.getUser().getPassword(), employee.getFirstname(), employee.getLastname(), employee.getRole().getRole(), employee.getUser().IsVerified());
         }).toList();
     }
+
+
+    private void validateEmail(String email) {
+        if  (!mailService.validate(email)) {
+            throw new BadRequestException("Invalid email format.");
+        }
+    }
+
 }

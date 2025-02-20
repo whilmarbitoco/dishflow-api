@@ -19,16 +19,18 @@ public class InventoryResource {
     IngredientService ingredientService;
 
     @GET
-    @Path("/all-ingredients")
+    @Path("/ingredients/all")
     public List<IngredientDTO> getAllIngredients() {
         return ingredientService.getAll();
     }
 
     @POST
-    @Path("/add-ingredient")
+    @Path("/ingredients/add")
     public Response addIngredients(IngredientDTO dto) {
         ingredientService.create(dto);
         return Status.ok("Ingredients Created.");
     }
+
+
 
 }

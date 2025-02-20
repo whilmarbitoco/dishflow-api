@@ -1,13 +1,24 @@
 package org.whilmarbitoco.Core.DTO;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class EmployeeDTO {
 
-    private String email;
-    private String password;
-    private String firstname;
-    private String lastname;
-    private String role;
-    private boolean verified;
+    @NotBlank
+    public String email;
+
+    @NotBlank
+    public String password;
+
+    @NotBlank
+    public String firstname;
+
+    @NotBlank
+    public String lastname;
+
+    @NotBlank
+    public String role;
+    public boolean verified;
 
 
     public EmployeeDTO(String email, String password, String firstname, String lastname, String role, boolean is_verified) {
@@ -19,31 +30,4 @@ public class EmployeeDTO {
         this.verified = is_verified;
     }
 
-    public boolean getVerified() {
-        return verified;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 }

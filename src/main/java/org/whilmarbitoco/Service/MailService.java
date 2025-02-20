@@ -14,4 +14,8 @@ public class MailService {
     public void sendEmail(String to, String subject, String body) {
         mailer.send(Mail.withText(to, subject, body));
     }
+
+    public boolean validate(String email) {
+        return email.matches("^[A-Za-z0-9+_.-]+@(.+)$");
+    }
 }
