@@ -19,18 +19,18 @@ public class IngredientService {
 
     public List<IngredientDTO> getAll() {
         return ingredientRepository.listAll().stream()
-                .map(ingd -> {
-                    return new IngredientDTO(ingd.getId(), ingd.getName(), ingd.getQuantity(), ingd.getUnit(), ingd.getCreated_at(), ingd.getUpdated_at());
+                .map(ingredient -> {
+                    return new IngredientDTO(ingredient.getId(), ingredient.getName(), ingredient.getQuantity(), ingredient.getUnit(), ingredient.getCreated_at(), ingredient.getUpdated_at());
                 }).toList();
     }
 
     @Transactional
-    public void create(IngredientDTO dto) {
-        if (ingredientRepository.getByName(dto.name) != null) {
-            throw new BadRequestException("Ingredients " + dto.name + " already in the database.");
+    public void create(String name, int quantity, String unit) {
+        if (ingredientRepository.getByName(name) != null) {
+            throw new BadRequestException("Ingredients " + name + " already in the database.");
         }
 
-        Ingredient ingredient = new Ingredient(dto.name, dto.quantity, dto.unit);
+        Ingredient ingredient = new Ingredient(name, quantity, unit);
         ingredientRepository.persist(ingredient);
     }
 
@@ -62,6 +62,15 @@ public class IngredientService {
 
         int qty = ingredient.getQuantity() + quantity;
         ingredient.setQuantity(qty);
+    }
+
+    public Ingredient findById(Long id) {
+        Ingredient ingredient = ingredientRepository.findById(id);
+        if (ingredient == null) {
+            throw new BadRequestException("Ingredient With ID " + id + " Not Found.");
+        }
+
+        return ingredient;
     }
 
 }

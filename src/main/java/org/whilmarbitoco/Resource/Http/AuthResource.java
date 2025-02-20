@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.jboss.logging.annotations.Param;
 import org.whilmarbitoco.Core.DTO.*;
 import org.whilmarbitoco.Core.utils.Status;
 import org.whilmarbitoco.Service.AuthService;

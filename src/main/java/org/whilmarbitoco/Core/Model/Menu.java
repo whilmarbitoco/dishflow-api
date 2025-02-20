@@ -28,7 +28,7 @@ public class Menu {
     @Column(name = "updated_at")
     private LocalDate updated_at;
 
-    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL)
     private List<MenuIngredient> ingredients;
 
 
@@ -74,6 +74,14 @@ public class Menu {
 
     public LocalDate getUpdated_at() {
         return updated_at;
+    }
+
+    public List<MenuIngredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<MenuIngredient> ingredients) {
+        this.ingredients = ingredients;
     }
 
     @PrePersist

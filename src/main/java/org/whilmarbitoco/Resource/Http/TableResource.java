@@ -11,8 +11,6 @@ import org.whilmarbitoco.Core.DTO.TableDTO;
 import org.whilmarbitoco.Core.utils.Status;
 import org.whilmarbitoco.Service.TableService;
 
-import java.util.Map;
-
 @Path("/table")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -22,17 +20,18 @@ public class TableResource {
     TableService tableService;
 
     @POST
-    @Path("/add-table")
-    public Response addTable(TableDTO table) {
-        tableService.addTable(table);
+    @Path("/add")
+    public Response addTable(TableDTO dto) {
+        tableService.addTable(dto.number, dto.capacity);
         return Status.ok("Table Created.");
     }
 
     @POST
-    @Path("update-table")
+    @Path("/update")
     public Response updateTable(TableDTO dto) {
-        tableService.updateTable(dto);
+        tableService.updateTable(dto.number, dto.status);
         return Status.ok("Table Updated.");
     }
+
 }
 

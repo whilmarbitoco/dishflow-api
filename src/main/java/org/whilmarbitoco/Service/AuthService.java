@@ -110,12 +110,6 @@ public class AuthService {
         emailVerificationService.sendVerification(email);
     }
 
-    public List<EmployeeDTO> getAll() {
-        return employeeRepository.listAll().stream().map(employee -> {
-           return new EmployeeDTO(employee.getUser().getEmail(), employee.getUser().getPassword(), employee.getFirstname(), employee.getLastname(), employee.getRole().getRole(), employee.getUser().IsVerified());
-        }).toList();
-    }
-
 
     private void validateEmail(String email) {
         if  (!mailService.validate(email)) {

@@ -10,24 +10,24 @@ import org.whilmarbitoco.Service.IngredientService;
 
 import java.util.List;
 
-@Path("/inventory")
+@Path("/ingredient")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class InventoryResource {
+public class IngredientResource {
 
     @Inject
     IngredientService ingredientService;
 
     @GET
-    @Path("/ingredients/all")
+    @Path("/all")
     public List<IngredientDTO> getAllIngredients() {
         return ingredientService.getAll();
     }
 
     @POST
-    @Path("/ingredients/add")
+    @Path("/add")
     public Response addIngredients(IngredientDTO dto) {
-        ingredientService.create(dto);
+        ingredientService.create(dto.name, dto.quantity, dto.unit);
         return Status.ok("Ingredients Created.");
     }
 
