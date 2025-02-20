@@ -28,7 +28,7 @@ public class User {
     @Column(name = "is_verified")
     private boolean is_verified;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Employee employee;
 
     public User() {}
