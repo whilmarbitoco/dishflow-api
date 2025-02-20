@@ -1,6 +1,6 @@
 package org.whilmarbitoco.Core.DTO;
 
-import org.whilmarbitoco.Core.TableStatus;
+import org.whilmarbitoco.Core.utils.TableStatus;
 
 public class TableDTO {
 

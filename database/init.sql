@@ -77,25 +77,24 @@ CREATE TABLE IF NOT EXISTS MenuIngredient (
 -- =========================
 -- ORDER & INVENTORY SYSTEM
 -- =========================
-
-CREATE TABLE IF NOT EXISTS Orders (
+CREATE TABLE IF NOT EXISTS OrderDetails (
     id INT PRIMARY KEY AUTO_INCREMENT,
     table_id INT NOT NULL,
     waiter_id INT NOT NULL,
-    status ENUM('Pending', 'Processing', 'Cooking', 'Ready', 'Served', 'Cancelled') DEFAULT 'Pending',
+    status ENUM('Pending', 'Processing', 'Ready') DEFAULT 'Pending',
     notes TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (table_id) REFERENCES `Table`(id) ON DELETE CASCADE,
-    FOREIGN KEY (waiter_id) REFERENCES Waiter(id) ON DELETE CASCADE
+    FOREIGN KEY (waiter_id) REFERENCES Employee(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS OrderDetails (
+CREATE TABLE IF NOT EXISTS Orders (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    order_id INT NOT NULL,
+    order_details_id INT NOT NULL,
     menu_id INT NOT NULL,
     quantity INT NOT NULL CHECK (quantity > 0),
-    FOREIGN KEY (order_id) REFERENCES Orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (order_details_id) REFERENCES OrderDetails(id) ON DELETE CASCADE,
     FOREIGN KEY (menu_id) REFERENCES Menu(id) ON DELETE CASCADE
 );
 
@@ -111,7 +110,7 @@ CREATE TABLE IF NOT EXISTS Payment (
     paid_amount DECIMAL(10,2) NOT NULL CHECK (paid_amount >= 0),
     change_amount DECIMAL(10,2) NOT NULL CHECK (change_amount >= 0),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (order_id) REFERENCES Orders(id) ON DELETE CASCADE
+    FOREIGN KEY (order_id) REFERENCES OrderDetails(id) ON DELETE CASCADE
 );
 
 -- =========================

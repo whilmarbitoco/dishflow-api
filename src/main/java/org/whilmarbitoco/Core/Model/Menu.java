@@ -1,27 +1,25 @@
 package org.whilmarbitoco.Core.Model;
 
 import jakarta.persistence.*;
-import org.whilmarbitoco.Core.utils.TableStatus;
 
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "`Table`")
-public class Tables {
+@Table(name = "Menu")
+public class Menu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "table_number")
-    private int table_number;
+    @Column(name = "name")
+    private String name;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    private TableStatus status;
+    @Column(name = "price")
+    private double price;
 
-    @Column(name = "capacity")
-    private int capacity;
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "created_at")
     private LocalDate created_at;
@@ -30,32 +28,40 @@ public class Tables {
     private LocalDate updated_at;
 
 
-    public Tables() {}
+    public Menu() {}
 
-    public Tables(int table_number, int capacity) {
-        this.table_number = table_number;
-        this.status = TableStatus.Available;
-        this.capacity = capacity;
+    public Menu(String name, double price, String description) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
     }
 
     public Long getId() {
         return id;
     }
 
-    public int getTable_number() {
-        return table_number;
+    public String getName() {
+        return name;
     }
 
-    public TableStatus getStatus() {
-        return status;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setStatus(TableStatus status) {
-        this.status = status;
+    public double getPrice() {
+        return price;
     }
 
-    public int getCapacity() {
-        return capacity;
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public LocalDate getCreated_at() {

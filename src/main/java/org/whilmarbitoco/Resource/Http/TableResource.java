@@ -8,14 +8,15 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.whilmarbitoco.Core.DTO.TableDTO;
+import org.whilmarbitoco.Core.utils.Status;
 import org.whilmarbitoco.Service.TableService;
 
 import java.util.Map;
 
-@Path("/manager")
+@Path("/table")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class ManagerResource {
+public class TableResource {
 
     @Inject
     TableService tableService;
@@ -24,9 +25,14 @@ public class ManagerResource {
     @Path("/add-table")
     public Response addTable(TableDTO table) {
         tableService.addTable(table);
-        return Response.status(Response.Status.CREATED)
-                .entity(Map.of("result", "Table Created."))
-                .build();
+        return Status.ok("Table Created.");
     }
 
+    @POST
+    @Path("update-table")
+    public Response updateTable(TableDTO dto) {
+        tableService.updateTable(dto);
+        return Status.ok("Table Updated.");
+    }
 }
+

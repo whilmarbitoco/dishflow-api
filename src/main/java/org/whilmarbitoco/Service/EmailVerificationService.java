@@ -3,7 +3,7 @@ package org.whilmarbitoco.Service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
-import org.whilmarbitoco.Core.Verification;
+import org.whilmarbitoco.Core.utils.Verification;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;

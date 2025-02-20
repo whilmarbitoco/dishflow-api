@@ -1,0 +1,16 @@
+
+DishFlow ToDo Guide:
+
+1. Make Models - ongoing
+2. User Login - done
+3. User Register - done
+4. Email Verification - done
+5. Real-Time Update - onhold
+6. Token Authentication - done
+7. Role Based Routes - done
+8. Create Tables - done
+9. Update Table Status - done
+10. Create Menu - onhold
+11. Update Menu Status - onhold
+12. Create Ingredients - onhold
+13. Auto Update Ingredients - onhold

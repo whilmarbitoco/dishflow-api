@@ -5,7 +5,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
 import org.whilmarbitoco.Core.Model.Tables;
-import org.whilmarbitoco.Core.TableStatus;
+import org.whilmarbitoco.Core.utils.TableStatus;
 
 @ApplicationScoped
 public class TableRepository implements PanacheRepository<Tables> {
