@@ -26,15 +26,17 @@ public class OrderService {
     EmployeeService employeeService;
     @Inject
     MenuService menuService;
-
     @Inject
     PaymentService paymentService;
+    @Inject
+    IngredientService ingredientService;
 
     @Transactional
     public void createOrder(int tableNumber,Long waiterID, String notes, List<OrderDTO> orders) {
         Tables tbl = tableService.getAvailableByNumber(tableNumber);
         Employee waiter = employeeService.getWaiterById(waiterID);
 
+        ingredientService.checkQuantity(orders);
         OrderDetails orderDetails = new OrderDetails(notes, waiter, tbl);
         List<Order> orderList = new ArrayList<>();
 

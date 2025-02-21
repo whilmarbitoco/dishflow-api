@@ -3,18 +3,18 @@ package org.whilmarbitoco.Resource.Http;
 
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.whilmarbitoco.Core.DTO.OrderDetailDTO;
 import org.whilmarbitoco.Core.DTO.PaymentDTO;
 import org.whilmarbitoco.Core.DTO.UpdateOrderDTO;
+import org.whilmarbitoco.Core.Model.Employee;
 import org.whilmarbitoco.Core.utils.Status;
+import org.whilmarbitoco.Service.EmployeeService;
 import org.whilmarbitoco.Service.OrderService;
-import org.whilmarbitoco.Service.PaymentService;
+
+import java.util.List;
 
 @Path("/order")
 @Produces(MediaType.APPLICATION_JSON)
@@ -24,9 +24,12 @@ public class OrderResource {
     @Inject
     OrderService orderService;
 
+    @Inject
+    EmployeeService employeeService;
+
     @POST
     @Path("/add")
-    public Response create(@Valid OrderDetailDTO dto) {
+    public Response create(OrderDetailDTO dto) {
         orderService.createOrder(dto.tableNumber, dto.waiterID, dto.notes, dto.orders);
         return Status.ok("Order Created.");
     }
@@ -42,5 +45,11 @@ public class OrderResource {
     @Path("/pay")
     public PaymentDTO pay(PaymentDTO dto) {
         return orderService.pay(dto.orderID, dto.amount, dto.method);
+    }
+
+    @GET
+    @Path("/test")
+    public List<Employee> test() {
+        return employeeService.getManagers();
     }
 }

@@ -8,7 +8,10 @@ import org.whilmarbitoco.Core.Model.Employee;
 import org.whilmarbitoco.Core.Model.Role;
 import org.whilmarbitoco.Core.Model.User;
 import org.whilmarbitoco.Repository.EmployeeRepository;
+import org.whilmarbitoco.Repository.RoleRepository;
 import org.whilmarbitoco.Repository.UserRepository;
+
+import java.util.List;
 
 @ApplicationScoped
 public class EmployeeService {
@@ -19,6 +22,9 @@ public class EmployeeService {
     @Inject
     UserRepository userRepository;
 
+    @Inject
+    RoleRepository roleRepository;
+
     public Employee getWaiterById(Long id) {
         Employee waiter = employeeRepository.findById(id);
 
@@ -27,7 +33,6 @@ public class EmployeeService {
         }
         return waiter;
     }
-
 
     @Transactional
     public void create(String email, String password, String firstname, String lastname, Role role) {
@@ -40,4 +45,8 @@ public class EmployeeService {
         employeeRepository.persist(employee);
     }
 
+    public List<Employee> getManagers() {
+        Role role = roleRepository.find("name", "Manager").firstResult();
+        return employeeRepository.find("role IN ?1", role).list();
+    }
 }

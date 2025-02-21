@@ -13,7 +13,7 @@ public class OrderDetailDTO {
     @NotNull
     public Long waiterID;
     public OrderStatus status;
-    @NotBlank
+    @NotNull
     public String notes;
 
     @NotBlank
