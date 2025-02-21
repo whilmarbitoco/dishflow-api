@@ -62,4 +62,13 @@ public class MenuService {
         menu.setIngredients(listIngredients);
         menuRepository.persist(menu);
     }
+
+    public Menu getMenu(Long menuID) {
+        Menu menu = menuRepository.findById(menuID);
+        if (menu == null) {
+            throw new BadRequestException("Menu with ID " + menuID + " not found.");
+        }
+
+        return menu;
+    }
 }

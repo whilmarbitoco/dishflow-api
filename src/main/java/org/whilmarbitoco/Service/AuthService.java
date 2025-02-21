@@ -1,6 +1,7 @@
 package org.whilmarbitoco.Service;
 
 import io.quarkus.elytron.security.common.BcryptUtil;
+import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -23,28 +24,24 @@ import java.util.Set;
 public class AuthService {
 
     @Inject
-    EmployeeRepository employeeRepository;
+    EmployeeService employeeService;
 
     @Inject
-    UserRepository userRepository;
-
+    UserService userService;
     @Inject
     RoleRepository roleRepository;
-
     @Inject
     TokenService tokenService;
-
     @Inject
     EmailVerificationService emailVerificationService;
-
     @Inject
     MailService mailService;
 
     @Transactional
     public void signup(String email, String password, String firstname, String lastname, String role) {
         validateEmail(email);
-
-        if (userRepository.findByEmail(email) != null) {
+        User user = userService.getByEmail(email);
+        if (user != null) {
             throw new BadRequestException("Email Already Registered.");
         }
 
@@ -54,23 +51,19 @@ public class AuthService {
         }
 
         String hashedPassword = BcryptUtil.bcryptHash(password);
-        User user = new User(email, hashedPassword);
-        userRepository.persist(user);
-
-        Employee employee = new Employee(firstname, lastname);
-        employee.setUser(user);
-        employee.setRole(empRole);
-
-        employeeRepository.persist(employee);
+        employeeService.create(email, hashedPassword, firstname, lastname, empRole);
         emailVerificationService.sendVerification(email);
     }
 
     public TokenDTO authenticate(String email, String password) {
         validateEmail(email);
-
-        User user = userRepository.findByEmail(email);
+        User user = userService.getByEmail(email);
         if (user == null) {
-            throw new BadRequestException("Email Not Fount.");
+            throw new BadRequestException("Email Not Found.");
+        }
+
+        if (!user.IsVerified()) {
+            throw new BadRequestException("User is Not Verified.");
         }
 
         if (!BcryptUtil.matches(password, user.getPassword())) {
@@ -86,19 +79,18 @@ public class AuthService {
 
     public void verifyEmail(String email, String code) {
         validateEmail(email);
-
-        User user = userRepository.findByEmail(email);
+        User user = userService.getByEmail(email);
         if (user == null) {
             throw new BadRequestException("Email Not Found.");
         }
 
         emailVerificationService.verifyCode(email, code);
-        userRepository.verifyUser(user.getId());
+        userService.verifyUser(user.getId());
     }
 
     public void generateVerification(String email) {
         validateEmail(email);
-        User user = userRepository.findByEmail(email);
+        User user = userService.getByEmail(email);
         if (user == null) {
             throw new BadRequestException("Email Not Found.");
         }

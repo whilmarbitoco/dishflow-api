@@ -37,13 +37,17 @@ public class OrderDetails {
     @JoinColumn(name = "waiter_id")
     private Employee waiter;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "table_id")
+    private Tables table;
+
     public OrderDetails() {}
 
-    public OrderDetails(OrderStatus status, String notes, Employee waiter, List<Order> orders) {
-        this.status = status;
+    public OrderDetails(String notes, Employee waiter, Tables table) {
+        this.status = OrderStatus.Pending;
         this.notes = notes;
         this.waiter = waiter;
-        this.orders = orders;
+        this.table = table;
     }
 
     public Long getId() {
@@ -96,6 +100,10 @@ public class OrderDetails {
 
     public void pay() {
         this.is_paid = true;
+    }
+
+    public Tables getTable() {
+        return table;
     }
 
     @PrePersist

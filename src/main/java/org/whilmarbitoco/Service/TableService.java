@@ -46,5 +46,24 @@ public class TableService {
 
         tableRepository.updateStatus(table.getId(), status);
     }
+
+    public TableStatus getStatus(int tableNumber) {
+        Tables tbl = tableRepository.findByTableNumber(tableNumber);
+
+        if (tbl == null) {
+            throw new BadRequestException("Table number " + tableNumber + " not found.");
+        }
+
+        return tbl.getStatus();
+    }
+
+    public Tables getAvailableByNumber(int tableNumber) {
+        Tables table = tableRepository.findByTableNumber(tableNumber);
+        if (table == null || table.getStatus() != TableStatus.Available) {
+            throw new BadRequestException("Table is not available.");
+        }
+
+        return table;
+    }
 }
 

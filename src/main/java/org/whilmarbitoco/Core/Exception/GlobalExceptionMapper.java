@@ -1,5 +1,6 @@
 package org.whilmarbitoco.Core.Exception;
 
+import io.quarkus.security.UnauthorizedException;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
