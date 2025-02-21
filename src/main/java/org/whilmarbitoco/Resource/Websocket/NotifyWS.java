@@ -1,7 +1,10 @@
 package org.whilmarbitoco.Resource.Websocket;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnError;
 import jakarta.websocket.OnMessage;
@@ -9,6 +12,7 @@ import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
+import org.whilmarbitoco.Core.DTO.SocketDTO;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,6 +23,7 @@ import static java.util.Objects.requireNonNull;
 @ApplicationScoped
 public class NotifyWS {
 
+    ObjectMapper mapper = new ObjectMapper();
     Map<WSKey, Session> sessions = new ConcurrentHashMap<>();
 
     @OnOpen
@@ -40,7 +45,9 @@ public class NotifyWS {
     }
 
     @OnMessage
-    public void onMessage(String message, @PathParam("type") String type) {
+    public void onMessage(String message, @PathParam("type") String type) throws JsonProcessingException {
+        SocketDTO tmp = mapper.readValue(message, SocketDTO.class);
+        System.out.println(tmp.event + " " + tmp.user);
         sendTo(type, message);
     }
 
