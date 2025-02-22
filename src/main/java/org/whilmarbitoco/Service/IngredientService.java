@@ -7,9 +7,7 @@ import jakarta.ws.rs.BadRequestException;
 import org.whilmarbitoco.Core.DTO.IngredientDTO;
 import org.whilmarbitoco.Core.DTO.OrderDTO;
 import org.whilmarbitoco.Core.Model.Ingredient;
-import org.whilmarbitoco.Core.Model.Menu;
 import org.whilmarbitoco.Core.Model.MenuIngredient;
-import org.whilmarbitoco.Core.Model.Order;
 import org.whilmarbitoco.Repository.IngredientRepository;
 import org.whilmarbitoco.Repository.MenuIngredientRepository;
 
@@ -90,15 +88,14 @@ public class IngredientService {
     }
 
     @Transactional
-    public void checkQuantity(List<OrderDTO> orders) {
+    public void validateQuantity(List<OrderDTO> orders) {
         for (OrderDTO o : orders) {
             List<Ingredient> ingredients = menuIngRepository.findIngredientsByMenuId(o.menuID);
             for (Ingredient i : ingredients) {
                 MenuIngredient menuIngredient = menuIngRepository.findByIngredient(i);
-                reduceQuantity(i.getId(), menuIngredient.getQuantityRequired());
+                reduceQuantity(i.getId(), (menuIngredient.getQuantityRequired() * o.quantity));
             }
         }
-
     }
 
 }

@@ -36,7 +36,7 @@ public class OrderService {
         Tables tbl = tableService.getAvailableByNumber(tableNumber);
         Employee waiter = employeeService.getWaiterById(waiterID);
 
-        ingredientService.checkQuantity(orders);
+        ingredientService.validateQuantity(orders);
         OrderDetails orderDetails = new OrderDetails(notes, waiter, tbl);
         List<Order> orderList = new ArrayList<>();
 
@@ -48,6 +48,7 @@ public class OrderService {
 
         orderDetails.setOrders(orderList);
         orderDetailRepository.persist(orderDetails);
+//        TODO: notify all waiters for table update
         tableService.updateTable(tableNumber, TableStatus.Occupied);
     }
 

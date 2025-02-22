@@ -24,11 +24,8 @@ public class OrderResource {
     @Inject
     OrderService orderService;
 
-    @Inject
-    EmployeeService employeeService;
-
     @POST
-    @Path("/add")
+    @Path("/create")
     public Response create(OrderDetailDTO dto) {
         orderService.createOrder(dto.tableNumber, dto.waiterID, dto.notes, dto.orders);
         return Status.ok("Order Created.");
@@ -45,11 +42,5 @@ public class OrderResource {
     @Path("/pay")
     public PaymentDTO pay(PaymentDTO dto) {
         return orderService.pay(dto.orderID, dto.amount, dto.method);
-    }
-
-    @GET
-    @Path("/test")
-    public List<Employee> test() {
-        return employeeService.getManagers();
     }
 }
