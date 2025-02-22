@@ -59,10 +59,11 @@ public class OrderService {
             throw new BadRequestException("Order Not Found.");
         }
 
-        if (order.getStatus() == OrderStatus.Served) {
-            throw new BadRequestException("Cannot Update Order. Order is already served.");
+        if (order.getStatus().ordinal() < OrderStatus.Served.ordinal()) {
+            throw new BadRequestException("Update Order Invalid. Order is already " + order.getStatus() + ".");
         }
 
+//        TODO: notify all waiters for order update
         order.setStatus(status);
     }
 

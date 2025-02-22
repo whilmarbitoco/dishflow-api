@@ -1,6 +1,5 @@
 package org.whilmarbitoco.Resource.Http;
 
-
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -9,12 +8,9 @@ import jakarta.ws.rs.core.Response;
 import org.whilmarbitoco.Core.DTO.OrderDetailDTO;
 import org.whilmarbitoco.Core.DTO.PaymentDTO;
 import org.whilmarbitoco.Core.DTO.UpdateOrderDTO;
-import org.whilmarbitoco.Core.Model.Employee;
 import org.whilmarbitoco.Core.utils.Status;
-import org.whilmarbitoco.Service.EmployeeService;
 import org.whilmarbitoco.Service.OrderService;
 
-import java.util.List;
 
 @Path("/order")
 @Produces(MediaType.APPLICATION_JSON)
