@@ -1,23 +1,15 @@
 package org.whilmarbitoco.Service;
 
 import io.quarkus.elytron.security.common.BcryptUtil;
-import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
-import org.whilmarbitoco.Core.DTO.EmployeeDTO;
-import org.whilmarbitoco.Core.DTO.LoginDTO;
 import org.whilmarbitoco.Core.DTO.TokenDTO;
-import org.whilmarbitoco.Core.DTO.VerifyEmailDTO;
-import org.whilmarbitoco.Core.Model.Employee;
 import org.whilmarbitoco.Core.Model.Role;
 import org.whilmarbitoco.Core.Model.User;
-import org.whilmarbitoco.Repository.EmployeeRepository;
 import org.whilmarbitoco.Repository.RoleRepository;
-import org.whilmarbitoco.Repository.UserRepository;
 
-import java.util.List;
 import java.util.Set;
 
 @ApplicationScoped

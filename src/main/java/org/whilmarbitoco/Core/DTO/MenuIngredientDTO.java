@@ -1,13 +1,13 @@
 package org.whilmarbitoco.Core.DTO;
 
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Positive;
 
 public class MenuIngredientDTO {
 
 
     public Long ingredient;
 
-    @PositiveOrZero
+    @Positive
     public int quantity;
 
 }

@@ -3,16 +3,15 @@ package org.whilmarbitoco.Resource.Http;
 
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.whilmarbitoco.Core.DTO.IngredientAddDTO;
 import org.whilmarbitoco.Core.DTO.MenuDTO;
 import org.whilmarbitoco.Core.utils.Status;
 import org.whilmarbitoco.Service.MenuService;
+
+import java.util.List;
 
 @Path("/menu")
 @Produces(MediaType.APPLICATION_JSON)
@@ -23,10 +22,11 @@ public class MenuResource {
     @Inject
     MenuService menuService;
 
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @POST
     @Path("/add")
     public Response add(@Valid MenuDTO dto) {
-        menuService.createMenu(dto.name, dto.price, dto.description);
+        menuService.createMenu(dto.name, dto.price, dto.description, dto.image);
         return Status.ok("Menu Added.");
     }
 
@@ -37,4 +37,9 @@ public class MenuResource {
         return Status.ok("Menu Updated. Ingredients Added.");
     }
 
+    @GET
+    @Path("/all")
+    public List<MenuDTO> all() {
+        return menuService.getAll();
+    }
 }

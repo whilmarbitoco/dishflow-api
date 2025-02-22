@@ -4,11 +4,12 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
+import org.whilmarbitoco.Core.DTO.MenuDTO;
 import org.whilmarbitoco.Core.DTO.MenuIngredientDTO;
 import org.whilmarbitoco.Core.Model.Ingredient;
 import org.whilmarbitoco.Core.Model.Menu;
 import org.whilmarbitoco.Core.Model.MenuIngredient;
-import org.whilmarbitoco.Repository.IngredientRepository;
 import org.whilmarbitoco.Repository.MenuIngredientRepository;
 import org.whilmarbitoco.Repository.MenuRepository;
 
@@ -20,21 +21,24 @@ public class MenuService {
 
     @Inject
     MenuRepository menuRepository;
-
     @Inject
-    IngredientRepository ingredientRepository;
-
+    IngredientService ingredientService;
     @Inject
     MenuIngredientRepository menuIngRepository;
+    @Inject
+    ImageService imageService;
 
 
     @Transactional
-    public void createMenu(String name, double price, String description) {
+    public void createMenu(String name, double price, String description, FileUpload image) {
+        imageService.validate(image);
         if ( menuRepository.findByName(name) != null) {
             throw new BadRequestException(name + " is already on the menu.");
         }
 
-        Menu newMenu = new Menu(name, price, description);
+        String file = imageService.saveFile(image);
+
+        Menu newMenu = new Menu(name, price, description, file);
         menuRepository.persist(newMenu);
     }
 
@@ -48,7 +52,7 @@ public class MenuService {
         }
 
         for (MenuIngredientDTO i : ingredients) {
-            Ingredient ingredient = ingredientRepository.findById(i.ingredient);
+            Ingredient ingredient = ingredientService.getById(i.ingredient);
             if (ingredient == null) {
                 throw new BadRequestException("Ingredients with ID " + i.ingredient + " not found.");
             }
@@ -70,5 +74,19 @@ public class MenuService {
         }
 
         return menu;
+    }
+
+    public List<MenuDTO> getAll() {
+        return menuRepository.listAll().stream()
+                .map(menu -> {
+                    MenuDTO m = new MenuDTO();
+                    m.id = menu.getId();
+                    m.name = menu.getName();
+                    m.price = menu.getPrice();
+                    m.description = menu.getDescription();
+                    m.img = menu.getImage();
+                    return m;
+                })
+                .toList();
     }
 }

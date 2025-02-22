@@ -34,7 +34,7 @@ public class OrderService {
     @Transactional
     public void createOrder(int tableNumber,Long waiterID, String notes, List<OrderDTO> orders) {
         Tables tbl = tableService.getAvailableByNumber(tableNumber);
-        Employee waiter = employeeService.getWaiterById(waiterID);
+        Employee waiter = employeeService.getWaiter(waiterID);
 
         ingredientService.validateQuantity(orders);
         OrderDetails orderDetails = new OrderDetails(notes, waiter, tbl);

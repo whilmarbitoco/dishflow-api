@@ -3,6 +3,7 @@ package org.whilmarbitoco.Resource.Http;
 
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -41,8 +42,8 @@ public class AuthResource {
 
     @POST
     @Path("/generate-verification")
-    public Response generateCode(@Valid EmailDTO emailDTO) {
-        service.generateVerification(emailDTO.email);
+    public Response generateCode(@QueryParam("email") @Email String email) {
+        service.generateVerification(email);
         return Status.ok("Please check your email to verify your account.");
     }
 

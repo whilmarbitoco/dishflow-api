@@ -17,6 +17,7 @@ public class ImageService {
     private static final long MAX_SIZE = 5 * 1024 * 1024; // 5MB
     private static final int MAX_WIDTH = 1920;
     private static final int MAX_HEIGHT = 1080;
+    private static final String PATH = System.getProperty("user.dir") + "/src/main/resources/META-INF/resources/";
 
     public void validate(FileUpload file) {
         try {
@@ -43,15 +44,16 @@ public class ImageService {
         }
     }
 
-    public void saveFile(FileUpload file) {
+    public String saveFile(FileUpload file) {
         try {
 
-            String filename = "wb2c0-dish-flow-ini-" + UUID.randomUUID() + ".png";
-            Path destination = Path.of(System.getProperty("user.dir") + "/src/main/resources/images", filename);
+            String filename = "images/wb2c0-dish-flow-ini-" + UUID.randomUUID() + ".png";
+            Path destination = Path.of(PATH, filename);
             Files.move(file.filePath(), destination);
-
+            return filename;
         } catch (IOException e) {
             throw new BadRequestException("Something went wrong while saving the image.");
         }
     }
+
 }

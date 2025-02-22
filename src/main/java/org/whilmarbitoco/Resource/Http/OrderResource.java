@@ -7,7 +7,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.whilmarbitoco.Core.DTO.OrderDetailDTO;
 import org.whilmarbitoco.Core.DTO.PaymentDTO;
-import org.whilmarbitoco.Core.DTO.UpdateOrderDTO;
+import org.whilmarbitoco.Core.DTO.OrderUpdateDTO;
 import org.whilmarbitoco.Core.utils.Status;
 import org.whilmarbitoco.Service.OrderService;
 
@@ -29,7 +29,7 @@ public class OrderResource {
 
     @POST
     @Path("/update")
-    public Response update(@Valid UpdateOrderDTO dto) {
+    public Response update(@Valid OrderUpdateDTO dto) {
         orderService.updateOrderDetail(dto.orderID, dto.status);
         return Status.ok("Order Updated.");
     }

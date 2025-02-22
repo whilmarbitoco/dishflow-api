@@ -22,6 +22,9 @@ public class Menu {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "image")
+    private String image;
+
     @Column(name = "created_at")
     private LocalDate created_at;
 
@@ -34,10 +37,11 @@ public class Menu {
 
     public Menu() {}
 
-    public Menu(String name, double price, String description) {
+    public Menu(String name, double price, String description, String image) {
         this.name = name;
         this.price = price;
         this.description = description;
+        this.image = image;
     }
 
     public Long getId() {
@@ -78,6 +82,14 @@ public class Menu {
 
     public List<MenuIngredient> getIngredients() {
         return ingredients;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public void setIngredients(List<MenuIngredient> ingredients) {

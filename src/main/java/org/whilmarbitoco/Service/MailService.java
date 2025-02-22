@@ -26,7 +26,7 @@ public class MailService {
 
     public void notifyManager(String ingredient, String body) {
         String subject = "DishFlow Notice";
-        List<Employee> managers = employeeService.getManagers();
+        List<Employee> managers = employeeService.getEmployeeByRole("Manager");
 
         for (Employee m : managers) {
             sendEmail(m.getUser().getEmail(), subject, body);

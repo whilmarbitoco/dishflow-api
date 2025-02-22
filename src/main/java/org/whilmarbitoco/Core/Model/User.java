@@ -28,6 +28,9 @@ public class User {
     @Column(name = "is_verified")
     private boolean is_verified;
 
+    @Column(name = "photo")
+    private String photo;
+
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Employee employee;
 
@@ -75,6 +78,14 @@ public class User {
 
     public Employee getEmployee() {
         return employee;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     @PrePersist

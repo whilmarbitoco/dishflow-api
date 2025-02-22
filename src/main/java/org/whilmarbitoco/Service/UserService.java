@@ -18,6 +18,14 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    public User getById(Long id) {
+        User user = userRepository.findById(id);
+        if (user == null) {
+            throw new BadRequestException("User Not Found.");
+        }
+        return user;
+    }
+
     @Transactional
     public void verifyUser(Long id) {
         User user = userRepository.findById(id);
@@ -29,6 +37,13 @@ public class UserService {
             throw new BadRequestException("User Already Verified");
         }
         user.verify();
+
+    }
+
+    @Transactional
+    public void create(String email, String password) {
+        User user = new User(email, password);
+        userRepository.persist(user);
 
     }
 

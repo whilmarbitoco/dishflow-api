@@ -1,33 +1,24 @@
 package org.whilmarbitoco.Core.DTO;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
 
 public class EmployeeDTO {
 
+    public Long id;
     @NotBlank
     public String email;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @NotBlank
     public String password;
-
     @NotBlank
     public String firstname;
-
     @NotBlank
     public String lastname;
-
     @NotBlank
     public String role;
+    public String photo;
     public boolean verified;
-
-
-    public EmployeeDTO(String email, String password, String firstname, String lastname, String role, boolean is_verified) {
-        this.email = email;
-        this.password = password;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.role = role;
-        this.verified = is_verified;
-    }
 
 }
