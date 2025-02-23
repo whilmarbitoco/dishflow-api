@@ -9,4 +9,6 @@ public class EmailDTO {
     @NotBlank
     public String email;
 
+    @NotBlank
+    public String code;
 }

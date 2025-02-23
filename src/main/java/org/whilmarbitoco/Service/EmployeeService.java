@@ -14,7 +14,6 @@ import org.whilmarbitoco.Repository.EmployeeRepository;
 import org.whilmarbitoco.Repository.RoleRepository;
 
 import java.util.List;
-import java.util.Objects;
 
 @ApplicationScoped
 public class EmployeeService {
@@ -87,7 +86,6 @@ public class EmployeeService {
         if (employee == null) {
             throw new BadRequestException("User with email " + user.getEmail() + " is not an employee.");
         }
-
         return employee;
     }
 

@@ -26,7 +26,14 @@ public class IngredientService {
     public List<IngredientDTO> getAll() {
         return ingredientRepository.listAll().stream()
                 .map(ingredient -> {
-                    return new IngredientDTO(ingredient.getId(), ingredient.getName(), ingredient.getQuantity(), ingredient.getUnit(), ingredient.getCreated_at(), ingredient.getUpdated_at());
+                    IngredientDTO dto = new IngredientDTO();
+                    dto.id = ingredient.getId();
+                    dto.name = ingredient.getName();
+                    dto.quantity = ingredient.getQuantity();
+                    dto.unit = ingredient.getUnit();
+                    dto.created_at = ingredient.getCreated_at();
+                    dto.updated_at = ingredient.getUpdated_at();
+                    return dto;
                 }).toList();
     }
 
@@ -35,7 +42,6 @@ public class IngredientService {
         if (ingredientRepository.getByName(name) != null) {
             throw new BadRequestException("Ingredients " + name + " already in the database.");
         }
-
         Ingredient ingredient = new Ingredient(name, quantity, unit);
         ingredientRepository.persist(ingredient);
     }

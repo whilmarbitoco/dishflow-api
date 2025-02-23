@@ -1,4 +1,4 @@
-package org.whilmarbitoco.Resource.Http;
+package org.whilmarbitoco.Resource.Controller;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -13,7 +13,7 @@ import java.util.List;
 @Path("/ingredient")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class IngredientResource {
+public class IngredientController {
 
     @Inject
     IngredientService ingredientService;

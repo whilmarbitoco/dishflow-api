@@ -17,12 +17,4 @@ public class IngredientDTO {
 
     public LocalDate updated_at;
 
-    public IngredientDTO(Long id, String name, int quantity, String unit, LocalDate created_at, LocalDate updated_at) {
-        this.id = id;
-        this.name = name;
-        this.quantity = quantity;
-        this.unit = unit;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
-    }
 }

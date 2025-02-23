@@ -1,4 +1,4 @@
-package org.whilmarbitoco.Resource.Http;
+package org.whilmarbitoco.Resource.Controller;
 
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -15,7 +15,7 @@ import org.whilmarbitoco.Service.OrderService;
 @Path("/order")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class OrderResource {
+public class OrderController {
 
     @Inject
     OrderService orderService;

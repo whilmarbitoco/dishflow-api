@@ -1,4 +1,4 @@
-package org.whilmarbitoco.Resource.Http;
+package org.whilmarbitoco.Resource.Controller;
 
 
 import jakarta.inject.Inject;
@@ -18,7 +18,7 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/employee")
-public class EmployeeResource {
+public class EmployeeController {
 
     @Inject
     EmployeeService employeeService;

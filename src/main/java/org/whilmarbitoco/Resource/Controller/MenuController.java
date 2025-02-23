@@ -1,4 +1,4 @@
-package org.whilmarbitoco.Resource.Http;
+package org.whilmarbitoco.Resource.Controller;
 
 
 import jakarta.inject.Inject;
@@ -16,7 +16,7 @@ import java.util.List;
 @Path("/menu")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class MenuResource {
+public class MenuController {
 
 
     @Inject

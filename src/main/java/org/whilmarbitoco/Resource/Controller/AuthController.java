@@ -1,4 +1,4 @@
-package org.whilmarbitoco.Resource.Http;
+package org.whilmarbitoco.Resource.Controller;
 
 
 import jakarta.inject.Inject;
@@ -15,7 +15,7 @@ import org.whilmarbitoco.Service.AuthService;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/auth")
-public class AuthResource {
+public class AuthController {
 
     @Inject
     AuthService service;
@@ -35,7 +35,7 @@ public class AuthResource {
 
     @POST
     @Path("/verify-email")
-    public Response verifyEmail(@Valid VerifyEmailDTO dto) {
+    public Response verifyEmail(@Valid EmailDTO dto) {
         service.verifyEmail(dto.email, dto.code);
         return Status.ok("Email Verified");
     }
