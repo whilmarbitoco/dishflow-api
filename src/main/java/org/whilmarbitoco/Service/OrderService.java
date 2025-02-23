@@ -42,6 +42,9 @@ public class OrderService {
 
         for (OrderDTO o : orders) {
             Menu menu = menuService.getMenu(o.menuID);
+            if (!menu.isAvailable()) {
+                throw new BadRequestException("Menu is not available.");
+            }
             Order tmp = new Order(menu, orderDetails, o.quantity);
             orderList.add(tmp);
         }

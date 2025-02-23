@@ -82,7 +82,7 @@ public class EmployeeService {
     }
 
     public Employee getByUser(User user) {
-        Employee employee = employeeRepository.find("user", user).firstResult();
+            Employee employee = employeeRepository.find("user", user).firstResult();
         if (employee == null) {
             throw new BadRequestException("User with email " + user.getEmail() + " is not an employee.");
         }

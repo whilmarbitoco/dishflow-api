@@ -1,6 +1,7 @@
 package org.whilmarbitoco.Resource.Controller;
 
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -20,19 +21,22 @@ public class IngredientController {
 
     @GET
     @Path("/all")
-    public List<IngredientDTO> getAllIngredients() {
+    public List<IngredientDTO> all() {
         return ingredientService.getAll();
     }
 
     @POST
     @Path("/add")
-    public Response addIngredients(IngredientDTO dto) {
+    public Response add(@Valid IngredientDTO dto) {
         ingredientService.create(dto.name, dto.quantity, dto.unit);
         return Status.ok("Ingredients Created.");
     }
 
-//    Update
-
-
+    @POST
+    @Path("/update")
+    public Response update(@QueryParam("id") Long id, IngredientDTO dto) {
+        ingredientService.update(id, dto.name, dto.quantity, dto.unit);
+        return Status.ok("Ingredient updated.");
+    }
 
 }

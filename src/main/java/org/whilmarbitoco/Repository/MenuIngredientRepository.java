@@ -30,4 +30,10 @@ public class MenuIngredientRepository implements PanacheRepository<MenuIngredien
     public MenuIngredient findByMenu(Menu menu) {
         return find("menu", menu).firstResult();
     }
+
+    public List<Menu> findMenusByIngredient(Ingredient ingredient) {
+        return find("ingredient", ingredient).stream()
+                .map(MenuIngredient::getMenu)
+                .toList();
+    }
 }

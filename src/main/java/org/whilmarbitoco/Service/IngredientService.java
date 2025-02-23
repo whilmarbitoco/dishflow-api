@@ -12,6 +12,7 @@ import org.whilmarbitoco.Repository.IngredientRepository;
 import org.whilmarbitoco.Repository.MenuIngredientRepository;
 
 import java.util.List;
+import java.util.Objects;
 
 @ApplicationScoped
 public class IngredientService {
@@ -20,6 +21,8 @@ public class IngredientService {
     IngredientRepository ingredientRepository;
     @Inject
     MenuIngredientRepository menuIngRepository;
+    @Inject
+    MenuService menuService;
     @Inject
     MailService mailService;
 
@@ -59,6 +62,7 @@ public class IngredientService {
         }
 
         if (quantity > ingredient.getQuantity()) {
+            menuService.updateAvailability(ingredient, false);
             throw new BadRequestException(ingredient.getName() + " Quantity is not enough.");
         }
 
@@ -67,21 +71,6 @@ public class IngredientService {
         }
 
         int qty = ingredient.getQuantity() - quantity;
-        ingredient.setQuantity(qty);
-    }
-
-    @Transactional
-    public void addQuantity(Long id, int quantity) {
-        if (quantity <= 0) {
-            throw new BadRequestException("Quantity cannot be less than 0.");
-        }
-
-        Ingredient ingredient = ingredientRepository.findById(id);
-        if (ingredient == null) {
-            throw new BadRequestException("Ingredient ID not found.");
-        }
-
-        int qty = ingredient.getQuantity() + quantity;
         ingredient.setQuantity(qty);
     }
 
@@ -104,4 +93,20 @@ public class IngredientService {
         }
     }
 
+    @Transactional
+    public void update(Long id, String name, int quantity, String unit) {
+        Ingredient ingredient = getById(id);
+        Ingredient checkName = ingredientRepository.getByName(name);
+
+        if (checkName != null && !Objects.equals(ingredient.getId(), checkName.getId())) {
+            throw new BadRequestException("Ingredients " + name + " already in the database.");
+        }
+
+        if (!ingredient.getName().equals(name)) {
+            ingredient.setName(name);
+        }
+
+        ingredient.setQuantity(quantity);
+        ingredient.setUnit(unit);
+    }
 }

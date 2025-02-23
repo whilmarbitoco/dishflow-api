@@ -89,4 +89,21 @@ public class MenuService {
                 })
                 .toList();
     }
+
+    @Transactional
+    public void updateAvailability(Ingredient ingredient, boolean isAvailable) {
+       List<Menu> menus = menuIngRepository.findMenusByIngredient(ingredient);
+
+       for(Menu m : menus) {
+           m.setAvailable(isAvailable);
+           System.out.println("......................................" + m.getName());
+       }
+
+       menuRepository.flush();
+    }
+
+
+    public boolean available(Long id) {
+        return getMenu(id).isAvailable();
+    }
 }

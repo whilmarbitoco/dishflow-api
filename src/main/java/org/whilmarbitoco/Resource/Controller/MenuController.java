@@ -18,7 +18,6 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class MenuController {
 
-
     @Inject
     MenuService menuService;
 

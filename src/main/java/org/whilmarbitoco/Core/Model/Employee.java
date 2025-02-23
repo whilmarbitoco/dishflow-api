@@ -35,7 +35,7 @@ public class Employee {
 
     public Employee() {}
 
-    public Employee(String lastname, String firstname) {
+    public Employee(String firstname, String lastname) {
         this.lastname = lastname;
         this.firstname = firstname;
     }

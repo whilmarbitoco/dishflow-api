@@ -25,6 +25,9 @@ public class Menu {
     @Column(name = "image")
     private String image;
 
+    @Column(name = "is_available")
+    private boolean available;
+
     @Column(name = "created_at")
     private LocalDate created_at;
 
@@ -94,6 +97,14 @@ public class Menu {
 
     public void setIngredients(List<MenuIngredient> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 
     @PrePersist
