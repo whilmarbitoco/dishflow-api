@@ -1,13 +1,18 @@
 package org.whilmarbitoco;
 
-import org.whilmarbitoco.Service.EmailVerificationService;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import org.whilmarbitoco.Repository.MenuRepository;
 
+@ApplicationScoped
 public class Main {
 
+
+    @Inject
+    static MenuRepository rp ;//= new MenuRepository();
+
     public static void main(String[] args) {
-        EmailVerificationService e = new EmailVerificationService();
 
+        rp.updateAvailability(Integer.toUnsignedLong(1), false);
     }
-
 }
-

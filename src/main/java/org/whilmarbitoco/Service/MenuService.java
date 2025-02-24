@@ -13,8 +13,8 @@ import org.whilmarbitoco.Core.Model.MenuIngredient;
 import org.whilmarbitoco.Repository.MenuIngredientRepository;
 import org.whilmarbitoco.Repository.MenuRepository;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class MenuService {
@@ -51,20 +51,29 @@ public class MenuService {
             throw new BadRequestException("Menu with ID " + menuID + " not found.");
         }
 
+        List<Ingredient> existingIngredients = menuIngRepository.findIngredientsByMenuId(menuID);
+
+        Map<Long, Ingredient> existingIngredientMap = existingIngredients.stream()
+                .collect(Collectors.toMap(Ingredient::getId, ingredient -> ingredient));
+
+        for (MenuIngredientDTO dto : ingredients) {
+            if (existingIngredientMap.containsKey(dto.ingredient)) {
+                Ingredient duplicate = existingIngredientMap.get(dto.ingredient);
+                throw new BadRequestException("Ingredient already exists: " + duplicate.getName());
+            }
+        }
+
         for (MenuIngredientDTO i : ingredients) {
             Ingredient ingredient = ingredientService.getById(i.ingredient);
             if (ingredient == null) {
                 throw new BadRequestException("Ingredients with ID " + i.ingredient + " not found.");
-            }
-            if (menuIngRepository.findByIngredient(ingredient) != null) {
-                throw new BadRequestException("Ingredient with ID " + i.ingredient + " is already added.");
             }
             MenuIngredient menuIngredient = new MenuIngredient(menu, ingredient, i.quantity);
             listIngredients.add(menuIngredient);
         }
 
         menu.setIngredients(listIngredients);
-        menuRepository.persist(menu);
+        menuRepository.updateAvailability(menuID, true);
     }
 
     public Menu getMenu(Long menuID) {
@@ -85,25 +94,42 @@ public class MenuService {
                     m.price = menu.getPrice();
                     m.description = menu.getDescription();
                     m.img = menu.getImage();
+                    m.available = menu.isAvailable();
                     return m;
                 })
                 .toList();
     }
 
-    @Transactional
-    public void updateAvailability(Ingredient ingredient, boolean isAvailable) {
-       List<Menu> menus = menuIngRepository.findMenusByIngredient(ingredient);
-
-       for(Menu m : menus) {
-           m.setAvailable(isAvailable);
-           System.out.println("......................................" + m.getName());
-       }
-
-       menuRepository.flush();
-    }
-
-
     public boolean available(Long id) {
         return getMenu(id).isAvailable();
     }
+
+    public List<MenuDTO> getAllAvailable() {
+        return menuRepository.listAll().stream()
+                .filter(Menu::isAvailable)
+                .map(menu -> {
+                    MenuDTO m = new MenuDTO();
+                    m.id = menu.getId();
+                    m.name = menu.getName();
+                    m.price = menu.getPrice();
+                    m.description = menu.getDescription();
+                    m.img = menu.getImage();
+                    return m;
+                })
+                .toList();
+    }
+
+
+    @Transactional
+    public void validate(Menu menu) {
+       List<MenuIngredient> mis = menu.getIngredients();
+
+       for (MenuIngredient mi : mis) {
+           Ingredient ing = mi.getIngredient();
+           if (mi.getQuantityRequired() > ing.getQuantity()) {
+               menu.setAvailable(false);
+           }
+       }
+    }
+
 }

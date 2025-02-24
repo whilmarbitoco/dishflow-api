@@ -31,7 +31,7 @@ public class OrderService {
     @Inject
     IngredientService ingredientService;
 
-    @Transactional
+    @Transactional(dontRollbackOn = BadRequestException.class)
     public void createOrder(int tableNumber,Long waiterID, String notes, List<OrderDTO> orders) {
         Tables tbl = tableService.getAvailableByNumber(tableNumber);
         Employee waiter = employeeService.getWaiter(waiterID);
@@ -43,12 +43,13 @@ public class OrderService {
         for (OrderDTO o : orders) {
             Menu menu = menuService.getMenu(o.menuID);
             if (!menu.isAvailable()) {
-                throw new BadRequestException("Menu is not available.");
+                throw new BadRequestException("Menu is not available. +++");
             }
             Order tmp = new Order(menu, orderDetails, o.quantity);
             orderList.add(tmp);
         }
 
+        ingredientService.updateQuantity(orders);
         orderDetails.setOrders(orderList);
         orderDetailRepository.persist(orderDetails);
 //        TODO: notify all waiters for table update

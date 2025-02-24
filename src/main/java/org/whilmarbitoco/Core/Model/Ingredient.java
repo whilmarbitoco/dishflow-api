@@ -28,10 +28,6 @@ public class Ingredient {
     @Column(name = "updated_at")
     private LocalDate updated_at;
 
-    @OneToMany(mappedBy = "ingredient", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MenuIngredient> menu;
-
-
     public Ingredient() {}
 
     public Ingredient(String name, int quantity, String unit) {

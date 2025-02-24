@@ -27,4 +27,6 @@ public class MenuDTO {
     public FileUpload image;
 
     public String img;
+
+    public boolean available;
 }

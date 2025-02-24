@@ -26,7 +26,7 @@ public class Menu {
     private String image;
 
     @Column(name = "is_available")
-    private boolean available;
+    private boolean is_available = false;
 
     @Column(name = "created_at")
     private LocalDate created_at;
@@ -100,11 +100,11 @@ public class Menu {
     }
 
     public boolean isAvailable() {
-        return available;
+        return is_available ;
     }
 
     public void setAvailable(boolean available) {
-        this.available = available;
+        this.is_available  = available;
     }
 
     @PrePersist

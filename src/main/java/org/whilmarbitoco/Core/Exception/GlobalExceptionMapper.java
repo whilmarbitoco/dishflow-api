@@ -20,6 +20,7 @@ public class GlobalExceptionMapper implements ExceptionMapper<Exception> {
                     .type(MediaType.APPLICATION_JSON)
                     .build();
         } else {
+//            e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(Map.of("error", e.getMessage()))
                     .type(MediaType.APPLICATION_JSON)

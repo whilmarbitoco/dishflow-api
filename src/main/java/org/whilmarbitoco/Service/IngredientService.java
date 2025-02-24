@@ -7,9 +7,11 @@ import jakarta.ws.rs.BadRequestException;
 import org.whilmarbitoco.Core.DTO.IngredientDTO;
 import org.whilmarbitoco.Core.DTO.OrderDTO;
 import org.whilmarbitoco.Core.Model.Ingredient;
+import org.whilmarbitoco.Core.Model.Menu;
 import org.whilmarbitoco.Core.Model.MenuIngredient;
 import org.whilmarbitoco.Repository.IngredientRepository;
 import org.whilmarbitoco.Repository.MenuIngredientRepository;
+import org.whilmarbitoco.Repository.MenuRepository;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,6 +19,8 @@ import java.util.Objects;
 @ApplicationScoped
 public class IngredientService {
 
+    @Inject
+    MenuRepository menuRepository;
     @Inject
     IngredientRepository ingredientRepository;
     @Inject
@@ -50,28 +54,15 @@ public class IngredientService {
     }
 
     @Transactional
-    public void reduceQuantity(Long id, int quantity) {
-        Ingredient ingredient = ingredientRepository.findById(id);
-        if (ingredient == null) {
-            throw new BadRequestException("Ingredient ID not found.");
+    public void updateQuantity(List<OrderDTO> orders) {
+        for (OrderDTO o : orders) {
+            List<Ingredient> ingredients = menuIngRepository.findIngredientsByMenuId(o.menuID);
+            for (Ingredient i : ingredients) {
+                MenuIngredient menuIngredient = menuIngRepository.findByIngredient(i);
+                int qty = menuIngredient.getQuantityRequired() * o.quantity;
+                menuIngredient.getIngredient().setQuantity(i.getQuantity() - qty);
+            }
         }
-
-        if (ingredient.getQuantity()  < 1) {
-            mailService.notifyManager(ingredient.getName(), ingredient.getName() + " has ran out.");
-            throw new BadRequestException(ingredient.getName() + " Quantity is not enough.");
-        }
-
-        if (quantity > ingredient.getQuantity()) {
-            menuService.updateAvailability(ingredient, false);
-            throw new BadRequestException(ingredient.getName() + " Quantity is not enough.");
-        }
-
-        if (ingredient.getQuantity() < 50) {
-            mailService.notifyManager(ingredient.getName(), ingredient.getName() + " is getting low.");
-        }
-
-        int qty = ingredient.getQuantity() - quantity;
-        ingredient.setQuantity(qty);
     }
 
     public Ingredient getById(Long id) {
@@ -82,13 +73,25 @@ public class IngredientService {
         return ingredient;
     }
 
-    @Transactional
+    @Transactional //(dontRollbackOn = BadRequestException.class)
     public void validateQuantity(List<OrderDTO> orders) {
         for (OrderDTO o : orders) {
             List<Ingredient> ingredients = menuIngRepository.findIngredientsByMenuId(o.menuID);
+
             for (Ingredient i : ingredients) {
                 MenuIngredient menuIngredient = menuIngRepository.findByIngredient(i);
-                reduceQuantity(i.getId(), (menuIngredient.getQuantityRequired() * o.quantity));
+                if (i.getQuantity() < 50) {
+                    mailService.notifyManager(i.getName(), i.getName() + " has is getting low.");
+                }
+
+                if (i.getQuantity()  == 0) {
+                    mailService.notifyManager(i.getName(), i.getName() + " has ran out.");
+                }
+
+               if ((menuIngredient.getQuantityRequired() * o.quantity) > i.getQuantity()) {
+                   menuRepository.updateAvailability(menuIngredient.getMenu().getId(), false);
+                   throw new BadRequestException(i.getName() + " Quantity is not enough.");
+               }
             }
         }
     }
@@ -108,5 +111,9 @@ public class IngredientService {
 
         ingredient.setQuantity(quantity);
         ingredient.setUnit(unit);
+    }
+
+    public List<Ingredient> getAllByMenu(Long id) {
+        return menuIngRepository.findIngredientsByMenuId(id);
     }
 }

@@ -16,7 +16,6 @@ public class OrderDetailDTO {
     @NotNull
     public String notes;
 
-    @NotBlank
     public List<OrderDTO> orders;
 
 }

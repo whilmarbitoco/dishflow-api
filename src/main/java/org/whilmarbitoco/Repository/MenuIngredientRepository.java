@@ -2,6 +2,7 @@ package org.whilmarbitoco.Repository;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import org.whilmarbitoco.Core.Model.Ingredient;
 import org.whilmarbitoco.Core.Model.Menu;
 import org.whilmarbitoco.Core.Model.MenuIngredient;
@@ -12,6 +13,7 @@ import java.util.List;
 @ApplicationScoped
 public class MenuIngredientRepository implements PanacheRepository<MenuIngredient> {
 
+    @Transactional
     public MenuIngredient findByIngredient(Ingredient ingredient) {
         return find("ingredient", ingredient).firstResult();
     }
@@ -31,9 +33,13 @@ public class MenuIngredientRepository implements PanacheRepository<MenuIngredien
         return find("menu", menu).firstResult();
     }
 
-    public List<Menu> findMenusByIngredient(Ingredient ingredient) {
-        return find("ingredient", ingredient).stream()
-                .map(MenuIngredient::getMenu)
-                .toList();
+    public List<Menu> findMenusByIngredient(Long id) {
+        List<Menu> menus = new ArrayList<>();
+        List<MenuIngredient> menuIngredients = find("ingredient.id", id).list();
+
+        for (MenuIngredient menuIngredient : menuIngredients) {
+            menus.add(menuIngredient.getMenu());
+        }
+        return menus;
     }
 }

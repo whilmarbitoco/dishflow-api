@@ -22,7 +22,7 @@ public class OrderController {
 
     @POST
     @Path("/create")
-    public Response create(OrderDetailDTO dto) {
+    public Response create(@Valid OrderDetailDTO dto) {
         orderService.createOrder(dto.tableNumber, dto.waiterID, dto.notes, dto.orders);
         return Status.ok("Order Created.");
     }
