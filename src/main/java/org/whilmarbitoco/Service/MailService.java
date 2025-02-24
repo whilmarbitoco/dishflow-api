@@ -17,7 +17,7 @@ public class MailService {
     EmployeeService employeeService;
 
     public void sendEmail(String to, String subject, String body) {
-//        mailer.send(Mail.withText(to, subject, body));
+        mailer.send(Mail.withText(to, subject, body));
     }
 
     public boolean validate(String email) {

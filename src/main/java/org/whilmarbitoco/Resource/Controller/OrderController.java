@@ -22,7 +22,7 @@ public class OrderController {
     OrderService orderService;
 
 
-    @RolesAllowed("Waiter")
+//    @RolesAllowed("Waiter")
     @POST
     @Path("/create")
     public Response create(@Valid OrderDetailDTO dto) {
