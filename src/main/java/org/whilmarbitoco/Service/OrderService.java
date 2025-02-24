@@ -11,6 +11,7 @@ import org.whilmarbitoco.Core.utils.OrderStatus;
 import org.whilmarbitoco.Core.utils.PaymentMethod;
 import org.whilmarbitoco.Core.utils.TableStatus;
 import org.whilmarbitoco.Repository.*;
+import org.whilmarbitoco.Resource.Websocket.NotifyWS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,9 @@ public class OrderService {
     PaymentService paymentService;
     @Inject
     IngredientService ingredientService;
+    @Inject
+    NotifyWS ws;
+
 
     @Transactional(dontRollbackOn = BadRequestException.class)
     public void createOrder(int tableNumber,Long waiterID, String notes, List<OrderDTO> orders) {
@@ -52,8 +56,9 @@ public class OrderService {
         ingredientService.updateQuantity(orders);
         orderDetails.setOrders(orderList);
         orderDetailRepository.persist(orderDetails);
-//        TODO: notify all waiters for table update
         tableService.updateTable(tableNumber, TableStatus.Occupied);
+
+        ws.sendTo("chef", "table updated."); // sends a real-time event to clients
     }
 
     @Transactional

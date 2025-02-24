@@ -114,6 +114,7 @@ public class MenuService {
                     m.price = menu.getPrice();
                     m.description = menu.getDescription();
                     m.img = menu.getImage();
+                    m.available = menu.isAvailable();
                     return m;
                 })
                 .toList();

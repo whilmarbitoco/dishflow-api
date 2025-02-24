@@ -61,7 +61,7 @@ public class NotifyWS {
         });
     }
 
-    private void sendTo(String type, String message) {
+    public void sendTo(String type, String message) {
         sessions.forEach((t, s) -> {
             if (t.type.equals(type)) {
                 s.getAsyncRemote().sendObject(message, res -> {

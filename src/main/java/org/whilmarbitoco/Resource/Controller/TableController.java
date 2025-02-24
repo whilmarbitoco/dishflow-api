@@ -1,10 +1,8 @@
 package org.whilmarbitoco.Resource.Controller;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.whilmarbitoco.Core.DTO.TableDTO;
@@ -13,6 +11,8 @@ import org.whilmarbitoco.Core.utils.Status;
 import org.whilmarbitoco.Repository.MenuRepository;
 import org.whilmarbitoco.Service.MenuService;
 import org.whilmarbitoco.Service.TableService;
+
+import java.util.List;
 
 @Path("/table")
 @Produces(MediaType.APPLICATION_JSON)
@@ -27,6 +27,9 @@ public class TableController {
     @Inject
     MenuRepository rp;
 
+
+
+    @RolesAllowed("Manager")
     @POST
     @Path("/add")
     public Response addTable(TableDTO dto) {
@@ -34,6 +37,7 @@ public class TableController {
         return Status.ok("Table Created.");
     }
 
+    @RolesAllowed({"Manager", "Waiter"})
     @POST
     @Path("/update")
     public Response updateTable(TableDTO dto) {
@@ -41,14 +45,20 @@ public class TableController {
         return Status.ok("Table Updated.");
     }
 
-    @POST
-    @Path("/test")
-    public void test() {
-        Menu menu = menuService.getMenu(Integer.toUnsignedLong(1));
-        menuService.validate(menu);
+    @RolesAllowed({"Manager", "Chef", "Waiter"})
+    @GET
+    @Path("/all")
+    public List<TableDTO> all() {
+        return tableService.getAll();
     }
 
-//  TODO:   get all table
+    @RolesAllowed({"Manager", "Chef", "Waiter"})
+    @GET
+    @Path("/all/available")
+    public List<TableDTO> allAvailable() {
+        return tableService.getAllAvailable();
+    }
+
 
 }
 

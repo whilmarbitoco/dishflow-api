@@ -1,5 +1,6 @@
 package org.whilmarbitoco.Resource.Controller;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -11,6 +12,7 @@ import org.whilmarbitoco.Service.IngredientService;
 
 import java.util.List;
 
+@RolesAllowed({"Manager", "Chef"})
 @Path("/ingredient")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -19,11 +21,13 @@ public class IngredientController {
     @Inject
     IngredientService ingredientService;
 
+
     @GET
     @Path("/all")
     public List<IngredientDTO> all() {
         return ingredientService.getAll();
     }
+
 
     @POST
     @Path("/add")

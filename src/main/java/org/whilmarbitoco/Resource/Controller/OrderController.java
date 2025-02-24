@@ -1,5 +1,6 @@
 package org.whilmarbitoco.Resource.Controller;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -20,6 +21,8 @@ public class OrderController {
     @Inject
     OrderService orderService;
 
+
+    @RolesAllowed("Waiter")
     @POST
     @Path("/create")
     public Response create(@Valid OrderDetailDTO dto) {
@@ -27,6 +30,8 @@ public class OrderController {
         return Status.ok("Order Created.");
     }
 
+
+    @RolesAllowed({"Waiter", "Chef"})
     @POST
     @Path("/update")
     public Response update(@Valid OrderUpdateDTO dto) {
@@ -34,6 +39,7 @@ public class OrderController {
         return Status.ok("Order Updated.");
     }
 
+    @RolesAllowed("Waiter")
     @POST
     @Path("/pay")
     public PaymentDTO pay(PaymentDTO dto) {

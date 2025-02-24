@@ -1,6 +1,7 @@
 package org.whilmarbitoco.Resource.Controller;
 
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -23,6 +24,8 @@ public class EmployeeController {
     @Inject
     EmployeeService employeeService;
 
+
+    @RolesAllowed({"Manager", "Chef", "Waiter"})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @POST
     @Path("/update")
@@ -31,16 +34,17 @@ public class EmployeeController {
         return Status.ok("Employee Updated.");
     }
 
+    @RolesAllowed("Manager")
     @GET
     public EmployeeDTO get(@QueryParam("id") @NotNull Long id) {
         return employeeService.getById(id);
     }
 
+    @RolesAllowed("Manager")
     @GET
     @Path("/all")
     public List<EmployeeDTO> getAll() {
         return employeeService.getAll();
     }
-
 
 }

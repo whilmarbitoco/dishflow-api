@@ -65,5 +65,11 @@ public class TableService {
 
         return table;
     }
+
+    public List<TableDTO> getAllAvailable() {
+        return getAll().stream()
+                .filter(tableDTO -> tableDTO.status == TableStatus.Available)
+                .toList();
+    }
 }
 

@@ -1,6 +1,7 @@
 package org.whilmarbitoco.Resource.Controller;
 
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -21,6 +22,8 @@ public class MenuController {
     @Inject
     MenuService menuService;
 
+
+    @RolesAllowed({"Manager", "Chef"})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @POST
     @Path("/add")
@@ -29,6 +32,8 @@ public class MenuController {
         return Status.ok("Menu Added.");
     }
 
+
+    @RolesAllowed({"Manager", "Chef"})
     @POST
     @Path("/add/ingredients")
     public Response addIngredient(@Valid IngredientAddDTO dto) {
@@ -36,9 +41,18 @@ public class MenuController {
         return Status.ok("Menu Updated. Ingredients Added.");
     }
 
+    @RolesAllowed({"Manager", "Chef", "Waiter"})
     @GET
     @Path("/all")
     public List<MenuDTO> all() {
         return menuService.getAll();
     }
+
+    @RolesAllowed({"Manager", "Chef", "Waiter"})
+    @GET
+    @Path("/all/available")
+    public List<MenuDTO> allAvailable() {
+        return menuService.getAllAvailable();
+    }
+
 }
