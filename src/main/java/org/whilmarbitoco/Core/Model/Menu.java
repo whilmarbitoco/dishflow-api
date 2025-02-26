@@ -1,6 +1,7 @@
 package org.whilmarbitoco.Core.Model;
 
 import jakarta.persistence.*;
+import org.whilmarbitoco.Core.utils.MenuType;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,6 +26,10 @@ public class Menu {
     @Column(name = "image")
     private String image;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    private MenuType type;
+
     @Column(name = "is_available")
     private boolean is_available = false;
 
@@ -40,10 +45,11 @@ public class Menu {
 
     public Menu() {}
 
-    public Menu(String name, double price, String description, String image) {
+    public Menu(String name, double price, String description, MenuType type, String image) {
         this.name = name;
         this.price = price;
         this.description = description;
+        this.type = type;
         this.image = image;
     }
 
@@ -73,6 +79,14 @@ public class Menu {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public MenuType getType() {
+        return type;
+    }
+
+    public void setType(MenuType type) {
+        this.type = type;
     }
 
     public LocalDate getCreated_at() {

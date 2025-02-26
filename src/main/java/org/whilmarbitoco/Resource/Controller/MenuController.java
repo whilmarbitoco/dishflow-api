@@ -28,7 +28,7 @@ public class MenuController {
     @POST
     @Path("/add")
     public Response add(@Valid MenuDTO dto) {
-        menuService.createMenu(dto.name, dto.price, dto.description, dto.image);
+        menuService.createMenu(dto.name, dto.price, dto.description, dto.type, dto.image);
         return Status.ok("Menu Added.");
     }
 

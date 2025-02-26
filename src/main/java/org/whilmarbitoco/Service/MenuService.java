@@ -10,6 +10,7 @@ import org.whilmarbitoco.Core.DTO.MenuIngredientDTO;
 import org.whilmarbitoco.Core.Model.Ingredient;
 import org.whilmarbitoco.Core.Model.Menu;
 import org.whilmarbitoco.Core.Model.MenuIngredient;
+import org.whilmarbitoco.Core.utils.MenuType;
 import org.whilmarbitoco.Repository.MenuIngredientRepository;
 import org.whilmarbitoco.Repository.MenuRepository;
 
@@ -30,7 +31,7 @@ public class MenuService {
 
 
     @Transactional
-    public void createMenu(String name, double price, String description, FileUpload image) {
+    public void createMenu(String name, double price, String description, MenuType type, FileUpload image) {
         imageService.validate(image);
         if ( menuRepository.findByName(name) != null) {
             throw new BadRequestException(name + " is already on the menu.");
@@ -38,7 +39,7 @@ public class MenuService {
 
         String file = imageService.saveFile(image);
 
-        Menu newMenu = new Menu(name, price, description, file);
+        Menu newMenu = new Menu(name, price, description, type, file);
         menuRepository.persist(newMenu);
     }
 
@@ -95,6 +96,7 @@ public class MenuService {
                     m.description = menu.getDescription();
                     m.img = menu.getImage();
                     m.available = menu.isAvailable();
+                    m.type = menu.getType();
                     return m;
                 })
                 .toList();
@@ -115,6 +117,7 @@ public class MenuService {
                     m.description = menu.getDescription();
                     m.img = menu.getImage();
                     m.available = menu.isAvailable();
+                    m.type = menu.getType();
                     return m;
                 })
                 .toList();

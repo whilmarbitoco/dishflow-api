@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.ws.rs.FormParam;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
+import org.whilmarbitoco.Core.utils.MenuType;
 
 public class MenuDTO {
 
@@ -25,6 +26,10 @@ public class MenuDTO {
     @FormParam("image")
     @NotNull
     public FileUpload image;
+
+    @FormParam("type")
+    @NotNull
+    public MenuType type;
 
     public String img;
 

@@ -66,6 +66,7 @@ public class AuthService {
         Set<String> role = Set.of(user.getEmployee().getRole().getRole());
 
         token.accessToken = tokenService.generateAccessToken(user.getEmail(), role);
+        token.refreshToken = tokenService.generateRefreshToken(user.getEmail());
         return token;
     }
 
