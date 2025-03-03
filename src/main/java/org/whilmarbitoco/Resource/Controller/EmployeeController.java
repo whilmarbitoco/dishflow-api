@@ -40,7 +40,7 @@ public class EmployeeController {
         return employeeService.getById(id);
     }
 
-    @RolesAllowed("Manager")
+    // @RolesAllowed("Manager")
     @GET
     @Path("/all")
     public List<EmployeeDTO> getAll() {

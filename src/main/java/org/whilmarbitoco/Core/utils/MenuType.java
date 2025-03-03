@@ -4,5 +4,6 @@ public enum MenuType {
     Appetizer,
     MainCourse,
     SideDish,
-    Dessert
+    Dessert,
+    Beverage
 }

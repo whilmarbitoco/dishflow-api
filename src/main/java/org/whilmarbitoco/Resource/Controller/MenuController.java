@@ -17,13 +17,12 @@ import java.util.List;
 @Path("/menu")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class MenuController {
+public class MenuController {   
 
     @Inject
     MenuService menuService;
 
 
-    @RolesAllowed({"Manager", "Chef"})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @POST
     @Path("/add")
@@ -41,7 +40,7 @@ public class MenuController {
         return Status.ok("Menu Updated. Ingredients Added.");
     }
 
-    @RolesAllowed({"Manager", "Chef", "Waiter"})
+    // @RolesAllowed({"Manager", "Chef", "Waiter"})
     @GET
     @Path("/all")
     public List<MenuDTO> all() {
@@ -53,6 +52,13 @@ public class MenuController {
     @Path("/all/available")
     public List<MenuDTO> allAvailable() {
         return menuService.getAllAvailable();
+    }
+
+    @DELETE
+    @Path("/delete")
+    public Response delete(@QueryParam("id") Long id) {
+        menuService.delete(id);
+        return Status.ok("Menu Deleted");
     }
 
 }

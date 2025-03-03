@@ -4,6 +4,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.BadRequestException;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 import javax.imageio.ImageIO;
+
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -44,16 +47,28 @@ public class ImageService {
         }
     }
 
+    
     public String saveFile(FileUpload file) {
         try {
-
             String filename = "images/wb2c0-dish-flow-ini-" + UUID.randomUUID() + ".png";
             Path destination = Path.of(PATH, filename);
-            Files.move(file.filePath(), destination);
+    
+            BufferedImage originalImage = ImageIO.read(file.filePath().toFile());
+    
+        
+            BufferedImage resizedImage = new BufferedImage(1500, 1000, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = resizedImage.createGraphics();
+            g2d.drawImage(originalImage.getScaledInstance(1500, 1000, Image.SCALE_SMOOTH), 0, 0, null);
+            g2d.dispose();
+    
+         
+            ImageIO.write(resizedImage, "png", destination.toFile());
+    
             return filename;
         } catch (IOException e) {
             throw new BadRequestException("Something went wrong while saving the image.");
         }
     }
+    
 
 }

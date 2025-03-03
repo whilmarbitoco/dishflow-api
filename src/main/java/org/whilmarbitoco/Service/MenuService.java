@@ -136,4 +136,14 @@ public class MenuService {
        }
     }
 
+    @Transactional
+    public void delete(Long id) {
+        Menu menu = menuRepository.findById(id);
+        if (menu == null) {
+            throw new BadRequestException("Menu with ID " + id + " not found.");   
+        }
+
+        menuRepository.delete(menu);
+    }
+
 }

@@ -5,6 +5,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
+import org.whilmarbitoco.Core.DTO.EmployeeDTO;
 import org.whilmarbitoco.Core.DTO.TokenDTO;
 import org.whilmarbitoco.Core.Model.Role;
 import org.whilmarbitoco.Core.Model.User;
@@ -64,6 +65,16 @@ public class AuthService {
 
         TokenDTO token = new TokenDTO();
         Set<String> role = Set.of(user.getEmployee().getRole().getRole());
+
+        EmployeeDTO emp = new EmployeeDTO();
+        emp.email = user.getEmail();;
+        emp.role = user.getEmployee().getRole().getRole();
+        emp.photo = user.getPhoto();
+        emp.firstname = user.getEmployee().getFirstname();
+        emp.lastname = user.getEmployee().getLastname();
+        emp.id = user.getEmployee().getId();
+
+        token.employee = emp;
 
         token.accessToken = tokenService.generateAccessToken(user.getEmail(), role);
         token.refreshToken = tokenService.generateRefreshToken(user.getEmail());
